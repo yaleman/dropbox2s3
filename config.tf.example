@@ -1,0 +1,35 @@
+locals {
+    # this will be used to create an ec2 key for access to the instance
+    ssh_public_key = ""
+
+    # add about 30GB to the size of the storage in your dropbox for cache files etc
+    disk_size_gb = 500              
+
+    # the IAM credentials profile to use to create everything
+    aws_profile = "dropbox2s3"
+    # the region to create things in 
+    aws_region = "us-east-1"
+    
+    # where you want your files
+    destination_bucket = "my-dropbox-bucket" 
+    
+    # t2.medium worked well for a ~200GB dropbox account
+    ec2_instance_type = "t2.medium" 
+    # this list will be allowed to SSH to the ec2 instance
+    source_ip_ssh = [ "1.2.3.4/32" ]
+}
+
+provider "aws" {
+  profile = "dropbox2s3"
+  region  = "us-east-1"
+}
+
+terraform {
+  backend "s3" {
+    profile = "dropbox2s3"
+    bucket = "my-terraform-state"
+    key    = "dropbox2s3.tfstate"
+    region  = "us-east-1"
+  }
+}
+
