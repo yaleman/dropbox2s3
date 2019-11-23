@@ -28,12 +28,11 @@ A terraform setup for transferring the contents of your Dropbox account to s3
    1. If you get something like this: `ssh: connect to host ec2-3-90-26-24.compute-1.amazonaws.com port 22: Connection refused` just wait a minute and try again, it's probably just booting.
    2. If it keeps happening, check your source IP hasn't changed.
 
-2. Update the software and install the AWS cli: `sudo apt update; sudo apt -y upgrade; sudo apt -y install awscli` asdfasdfdsf
+2. Update the software and install the AWS cli: `sudo apt update; sudo apt -y upgrade; sudo apt -y install awscli libatomic1` (On Ubuntu bionic I had to install libatomic1 to make it work)
 
 3. To install Dropbox:
    
    1. . Download and extract dropbox: `wget -O - https://www.dropbox.com/download?plat=lnx.x86_64 |tar zxf -`
-   2. On Ubuntu bionic I had to install libatomic1 to make it work: `sudo apt install -y libatomic1`
 
 4. Now to run Dropbox
    
@@ -48,7 +47,9 @@ A terraform setup for transferring the contents of your Dropbox account to s3
 
 8. Keep running `du -sh` periodically to watch it grow.
 
-9. Once you're happy with the sync status, or you're impatient, syncronise your files to your s3 bucket. In this example my bucket is called `example-dropbox-bucket`. The command is `aws s3 sync --exclude ".dropbox*" ~/Dropbox/ s3://example-dropbox-bucket`
+9. Once you're happy with the sync status, or you're impatient, syncronise your files to your s3 bucket. In this example my bucket is called `example-dropbox-bucket`. The command is `aws s3 sync --only-show-errors --exclude ".dropbox*" ~/Dropbox/ s3://example-dropbox-bucket`
+
+10. You can run the sync as often as you like - if you have changed things in Dropbox and want it to be the same, add `--delete` before the `--exclude` flag.
 
 # Cleaning up
 
