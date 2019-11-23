@@ -55,13 +55,9 @@ A terraform setup for transferring the contents of your Dropbox account to s3
 
 You won't want to just run `terraform destroy` as that'll kill off your s3 bucket with all your files in it 😄The plan is as follows:
 
-1. Disable the `aws_s3_bucket` part of the terraform configuration.
-   
-   1. This is done by renaming `s3.tf` to `s3.tf.disabled` - alternatively just delete the file.
+1. Disable the `aws_s3_bucket` part of the terraform configuration. This is done by renaming `s3.tf` to `s3.tf.disabled` - alternatively just delete the file.
 
-2. Remove the relevant state.
-   
-   1. `terraform state rm aws_s3_bucket.storage`
+2. Remove the relevant state. `terraform state rm aws_s3_bucket.storage`
 
 3. Check that it doesn't know about the s3 bucket anymore by running `terraform plan`
    
